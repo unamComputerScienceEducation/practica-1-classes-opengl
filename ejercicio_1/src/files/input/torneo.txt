@@ -1,0 +1,16 @@
+O Grommash 80 60 30
+D Alduin 50 40 90
+T Ugh 70 40 50
+H Eldrin 40 55 95
+E Skully 60 45 20
+V Nosferatu 65 50 70
+V Vampiro 28 50 23
+H Hola 123 43 78
+T Tito 123 83 83
+E Elefante 89 67 30
+E Ernesto 74 23 16
+O Odin 12 86 36 
+T Tilin 48 29 57
+D Dino 58 42 33
+D Dan 37 94 46
+O Clancy 99 99 99
