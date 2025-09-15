@@ -20,7 +20,13 @@ find_package(glfw3 REQUIRED)
 
 
 # Ejecutable
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/Main.cpp)
+add_executable(${PROJECT_NAME} 
+    ${PROJECT_SOURCE_DIR}/src/Main.cpp
+    # Por alguna razon, si no incluyo al resto de archivos, no compila :/
+    ${PROJECT_SOURCE_DIR}/src/App.cpp
+    ${PROJECT_SOURCE_DIR}/src/Window.cpp
+    ${PROJECT_SOURCE_DIR}/src/Draw.cpp
+    ${PROJECT_SOURCE_DIR}/src/Compiler.cpp)
 
 # Librerías
 # Linkear las bibliotecas encontradas
