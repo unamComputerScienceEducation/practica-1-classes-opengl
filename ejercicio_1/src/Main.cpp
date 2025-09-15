@@ -2,12 +2,13 @@
 #include <cstring>
 #include <vector>
 
-#include "include/io_files/Lectura.h"
+#include "../include/io_files/Lectura.h"
 
-
+/* Metodo principal */
 int main() {
-
-    char archivo[] = "../src/files/input/batallas.txt";
-    io::leerBatalla(archivo);   // Simula la batalla leida del archivo
-    io::leerTorneo("../src/files/input/torneo.txt"); // Simula el torneo leido del archivo
+    // Leemos los archivos de batalla y torneo
+    char batalla[] = "../files/input/batallas.txt";
+    io::leerBatalla(batalla);   // Simula la batalla leida del archivo
+    char torneo[] = "../files/input/torneo.txt";
+    io::leerTorneo(torneo); // Simula el torneo leido del archivo
 }

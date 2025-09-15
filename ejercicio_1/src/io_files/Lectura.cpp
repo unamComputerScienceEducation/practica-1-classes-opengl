@@ -1,39 +1,21 @@
-#ifndef LECTURA_H
-#define LECTURA_H
+/**
+ * @file Lectura.cpp
+ * @brief Implementación de las funciones para leer los archivos de batalla y/o torneo
+ */
 
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <iostream>
-
-
-// Clases de monstruos
-#include "../monsters/Monstruo.h"
-#include "../monsters/Orco.h"
-#include "../monsters/Troll.h"
-#include "../monsters/Vampiro.h"
-#include "../monsters/Dragon.h"
-#include "../monsters/Hechicero.h"
-#include "../monsters/Esqueleto.h"
-#include "../Batalla.h"
-#include "../Torneo.h"
-
-// Para escribir resultados
-#include "Escritura.h"
+#include "../include/io_files/Lectura.h"
 
 namespace io {
 
-    /* Función para leer los datos de una batalla desde un archivo */
     int leerBatalla(const std::string& nombreArchivo) {
 
+        // Abrimos el archivo en modo lectura
         std::ifstream archivo(nombreArchivo, std::ios::in);
-
         if (!archivo.is_open()) { 
             std::cerr << "Error al abrir el archivo: " << nombreArchivo << std::endl;
             return -1;
         }
-
+        // Formato de cada linea, nos da informacion de dos monstruos y el tipo de batalla
         char tipo1, tipo2;
         std::string nombre1, nombre2;
         int fuerza1, agilidad1, inteligencia1;
@@ -45,10 +27,11 @@ namespace io {
         // Tipo1 Nombre1 Fuerza1 Agilidad1 Inteligencia1 Tipo2 Nombre2 Fuerza2 Agilidad2 Inteligencia2 tipoBatalla
         while (archivo >> tipo1 >> nombre1 >> fuerza1 >> agilidad1 >> inteligencia1
                >> tipo2 >> nombre2 >> fuerza2 >> agilidad2 >> inteligencia2 >> tbatalla) {
-
+            // Creamos dos monstruos, al no saber de que tipo son, usamos punteros a la clase base
             monster::Monstruo* monstruo1 = nullptr;
             monster::Monstruo* monstruo2 = nullptr;
 
+            // Dependiendo del tipo, creamos el primer monstruo correspondiente
             switch (tipo1)
             {
             case 'O':
@@ -74,6 +57,7 @@ namespace io {
                 break;
             }
 
+            // Ahora para el segundo monstruo
             switch (tipo2)
             {
             case 'O':
@@ -99,31 +83,34 @@ namespace io {
                 break;
             }
 
+            // Si ambos monstruos se crearon correctamente, simulamos la batalla
             if (monstruo1 && monstruo2) {
                 batalla::Batalla batalla(monstruo1, monstruo2, tbatalla);
                 buffer += batalla.simular();
             }
 
+            // Liberamos la memoria de los monstruos
             delete monstruo1;
             delete monstruo2;
         }
 
         archivo.close();
 
-        // Escribir resultados en el archivo
-        std::string resultados = "../src/files/output/resultados.txt";
+        // Escribimos los resultados en el archivo
+        std::string resultados = "../files/output/resultados.txt";
         io::escribirResultados(resultados, buffer);
         return 0;
     }
 
-    /* Función para leer los datos de un torneo desde un archivo */
     int leerTorneo(const std::string& nombreArchivo) {
+        // Abrimos el archivo en modo lectura
         std::ifstream archivo(nombreArchivo, std::ios::in);
         if (!archivo.is_open()) { 
             std::cerr << "Error al abrir el archivo: " << nombreArchivo << std::endl;
             return -1;
         }
 
+        // Formato de cada linea, nos da informacion de un monstruo
         char tipo;
         std::string nombre;
         int fuerza, agilidad, inteligencia;
@@ -132,6 +119,7 @@ namespace io {
         // Se sigue del siguiente formato:
         // Tipo Nombre Fuerza Agilidad Inteligencia
         while (archivo >> tipo >> nombre >> fuerza >> agilidad >> inteligencia) {
+            // Creamos un monstruo, al no saber de que tipo es, usamos un puntero a la clase base
             monster::Monstruo* monstruo = nullptr;
 
             switch (tipo)
@@ -158,20 +146,21 @@ namespace io {
                 std::cerr << "Tipo de monstruo desconocido: " << tipo << std::endl;
                 break;
             }
-
+            // Si el monstruo se creo correctamente, lo agregamos al vector
             if (monstruo) {
-                monstruos.push_back(monstruo); // Cada monstruo se añade al vector
+                monstruos.push_back(monstruo); 
             }
         }
-        torneo::Torneo torneo(monstruos);
-        std::string buffer = torneo.simular(); // Comenzamos el torneo
 
+        // A este punto, ya leimos los monstruos del archivo
         archivo.close();
 
-        std::string resultados = "../src/files/output/resultados_torneo.txt";
+        torneo::Torneo torneo(monstruos); // Enlistamos a los monstruos en el torneo
+        std::string buffer = torneo.simular(); // Comenzamos el torneo
+
+        // Escribimos los resultados en el archivo y terminamos
+        std::string resultados = "../files/output/resultados_torneo.txt";
         io::escribirResultados(resultados, buffer);
         return 0;
     }
 };
-
-#endif // LECTURA_H
